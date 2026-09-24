@@ -1,0 +1,8 @@
+services:
+ web:
+    image: php:8.5-apache
+    container_name: dwes-web
+    ports:
+        - "80:80"
+    volumes:
+        - ./src:/var/www/html
