@@ -24,7 +24,10 @@
 
         .impar {
             color: red;
-            background-color: #dddedd;
+        }
+
+        .fondo {
+            background-color: #6b6b6b;
         }
     </style>
 </head>
@@ -33,17 +36,44 @@
     <table>
         <tr>
             <?php
+            $fondo = true;
+            # posiciones [tesoro, trampa, cofre, llave]
+            $posiciones = [];
+            $victoria = false;
+
+            # Dibujar tablero
+            for ($i = 1; $i <= 4; $i++) {
+                do {
+                    $valor = rand(1, 100);
+                } while (in_array($valor, $posiciones));
+
+                $posiciones[] = $valor;
+            }
+
             for ($i = 1; $i <= 100; $i++) {
-                $clase = ($i % 2 == 0) ? "par" : "impar";
-                printf("<td class=\"%s\">%03d</td>\n", $clase, $i);
+
+                // $clase = ($i % 2 == 0) ? "par" : "impar";
+                // printf("<td class=\"%s\">%03d</td>\n", $clase, $i);
+                $valor = str_pad($i, 3, 0, STR_PAD_LEFT);
+
+                $valor = match (array_search($i, $posiciones)) {
+                    0 => "💎",
+                    1 => "🔑",
+                    2 => "🧨",
+                    3 => "🔒",
+                    default => str_pad($i, 3, 0, STR_PAD_LEFT)
+                };
+
+                echo "<td class=\"" . (($i % 2 == 0) ? "par" : "impar") . " " . (($fondo) ? "fondo" : "") . "\">$valor </td>";
+
+                $fondo = !$fondo;
 
                 if ($i % 10 == 0) {
                     echo "</tr>\n" . (($i != 100) ? "<tr>" : "");
+                    $fondo = !$fondo;
                 }
             }
             ?>
-    </table>
-
 
 </body>
 
