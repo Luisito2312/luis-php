@@ -50,6 +50,7 @@
         }
     }
 
+    // Pasar el array ENTERO
     if (isset($_POST["diamante"]) && isset($_POST["trampa"]) && isset($_POST["cofre"]) && $_POST["llave"]) {
 
         $posiciones[0] = $_POST["diamante"];
@@ -102,7 +103,7 @@
             <input type="hidden" name="trampa" value="<?php echo $posiciones[2]; ?>">
             <input type="hidden" name="cofre" value="<?php echo $posiciones[1]; ?>">
             <input type="hidden" name="llave" value="<?php echo $posiciones[3]; ?>">
-            
+
             <label for="posicion">Introduce la posicion del tesoro:</label>
             <input type="number" name="posicion" id="posicion" min="1" max="100" autofocus required />
             <button>Enviar</button>
