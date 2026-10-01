@@ -75,7 +75,7 @@
             }
             ?>
     </table>
-    <form action="tesoro.php" method="get">
+    <form action="tesoro2.php" method="get">
         <label for="posicion">Introduce la posicion del tesoro.</label>
         <input type="number" name="posicion" id="posicion" min="1" max="100" autofocus required/>
         <button>Enviar</button>

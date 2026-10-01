@@ -37,14 +37,14 @@
     $posiciones = [];
     $victoria = false;
 
-    if (isset($_GET["posicion"]) && isset($_GET["diamante_anterior"])) {
-        if ($_GET["posicion"] == $_GET["diamante_anterior"]) {
+    if (isset($_GET["posicion"]) && isset($_GET["diamante"])) {
+        if ($_GET["posicion"] == $_GET["diamante"]) {
             $victoria = true;
         }
     }
 
     if ($victoria) {
-        echo "<h2>¡Enhorabuena, has ganado porque has encontrado el diamante!</h2>";
+        echo "<h2>¡Enhorabuena, has ganado!</h2>";
     } else {
     ?>
         <table>
@@ -80,8 +80,8 @@
                 ?>
         </table>
 
-        <form action="tesoro.php" method="get">
-            <input type="hidden" name="diamante_anterior" value="<?php echo $posiciones[0]; ?>">
+        <form action="tesoro2.php" method="get">
+            <input type="hidden" name="diamante" value="<?php echo $posiciones[0]; ?>">
             <label for="posicion">Introduce la posicion del tesoro:</label>
             <input type="number" name="posicion" id="posicion" min="1" max="100" autofocus required />
             <button>Enviar</button>
@@ -89,7 +89,7 @@
 
     <?php
         if (isset($_GET["posicion"])) {
-            echo "<p>No has encontrado el tesoro. ¡Las posiciones han cambiado!</p>";
+            echo "<p>No has encontrado el tesoro.</p>";
         }
     }
     ?>
