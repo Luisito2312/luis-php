@@ -28,6 +28,10 @@
         .fondo {
             background-color: #6b6b6b;
         }
+
+        form {
+            margin-top: 15px;
+        }
     </style>
 </head>
 
