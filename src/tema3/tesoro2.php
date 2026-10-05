@@ -4,7 +4,7 @@
 <head>
     <title>Ejercicio 3</title>
     <meta charset="UTF-8" />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>
         table {
             border-style: solid;
@@ -42,21 +42,10 @@
     $victoria = false;
     $derrota = false;
 
-    if (isset($_POST["posicion"]) && isset($_POST["diamante"]) && isset($_POST["trampa"])) {
-        if ($_POST["posicion"] == $_POST["diamante"]) {
-            $victoria = true;
-        } elseif ($_POST["posicion"] == $_POST["trampa"]) {
-            $derrota = true;
-        }
-    }
-
     // Pasar el array ENTERO
-    if (isset($_POST["diamante"]) && isset($_POST["trampa"]) && isset($_POST["cofre"]) && $_POST["llave"]) {
+    if (isset($_POST["posiciones"])) {
 
-        $posiciones[0] = $_POST["diamante"];
-        $posiciones[2] = $_POST["trampa"];
-        $posiciones[1] = $_POST["cofre"];
-        $posiciones[3] = $_POST["llave"];
+        $posiciones = $_POST["posiciones"];
 
     } else {
 
@@ -65,6 +54,14 @@
                 $valor = rand(1, 100);
             } while (in_array($valor, $posiciones));
             $posiciones[] = $valor;
+        }
+    }
+
+    if (isset($_POST["posicion"]) && !empty($posiciones)) {
+        if ($_POST["posicion"] == $posiciones[0]) {
+            $victoria = true;
+        } elseif ($_POST["posicion"] == $posiciones[2]) {
+            $derrota = true;
         }
     }
 
@@ -77,32 +74,33 @@
         <table>
             <tr>
                 <?php
-                    for ($i = 1; $i <= 100; $i++) {
-                        $valor = match (array_search($i, $posiciones)) {
-                            0 => "💎",
-                            1 => "🗝️",
-                            2 => "🧨",
-                            3 => "🔒",
-                            default => str_pad($i, 3, "0", STR_PAD_LEFT)
-                        };
+                for ($i = 1; $i <= 100; $i++) {
+                    $valor = match (array_search($i, $posiciones)) {
+                        0 => "💎",
+                        1 => "🗝️",
+                        2 => "🧨",
+                        3 => "🔒",
+                        default => str_pad($i, 3, "0", STR_PAD_LEFT)
+                    };
 
-                        echo "<td class=\"" . (($i % 2 == 0) ? "par" : "impar") . " " . (($fondo) ? "fondo" : "") . "\">$valor</td>";
+                    echo "<td class=\"" . (($i % 2 == 0) ? "par" : "impar") . " " . (($fondo) ? "fondo" : "") . "\">$valor</td>";
+                    $fondo = !$fondo;
+
+                    if ($i % 10 == 0) {
+                        echo "</tr>\n" . (($i != 100) ? "<tr>" : "");
                         $fondo = !$fondo;
-
-                        if ($i % 10 == 0) {
-                            echo "</tr>\n" . (($i != 100) ? "<tr>" : "");
-                            $fondo = !$fondo;
-                        }
                     }
+                }
                 ?>
         </table>
 
         <form action="tesoro2.php" method="POST">
 
-            <input type="hidden" name="diamante" value="<?= $posiciones[0]; ?>">
-            <input type="hidden" name="trampa" value="<?php echo $posiciones[2]; ?>">
-            <input type="hidden" name="cofre" value="<?php echo $posiciones[1]; ?>">
-            <input type="hidden" name="llave" value="<?php echo $posiciones[3]; ?>">
+            <?php foreach ($posiciones as $pos): ?>
+
+                <input type="hidden" name="posiciones[]" value="<?= $pos; ?>">
+
+            <?php endforeach; ?>
 
             <label for="posicion">Introduce la posicion del tesoro:</label>
             <input type="number" name="posicion" id="posicion" min="1" max="100" autofocus required />
@@ -115,6 +113,9 @@
         }
     }
     ?>
+    <form id="recargar" action="tesoro2.php" method="get">
+        <button id="recargar"> Reiniciar juego</button>
+    </form>
 </body>
 
 </html>
