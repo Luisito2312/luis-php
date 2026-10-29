@@ -28,7 +28,7 @@
             echo "<td>{$habitacion["nombre"]}</td>";
             echo "<td>{$habitacion["precio"]}</td>";
             echo "<td>{$habitacion["capacidad"]}</td>";
-            echo "<td>{$habitacion["estado"]}</td>";
+            echo "<td>{$habitacion["disponible"]}</td>";
             echo "<td><input type=\"radio\" name=\"habitacion_id\" value=\"$numero\" required></td>";
             echo "</tr>";
         endforeach;
