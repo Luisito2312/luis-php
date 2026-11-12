@@ -33,6 +33,7 @@ endif;
 <body>
 
     <div class="container">
+        <form action="index.php" method="post"></form>
 
         <div class="izquierda">
             <h3>Habitaciones</h3>
@@ -57,21 +58,21 @@ endif;
         </div>
 
 
-        <form action="index.php" method="post">
-            <label for="huesped">Nombre del huesped</label>
-            <input type="text" name="huesped" id="huesped" required autofocus>
 
-            </br>
+        <label for="huesped">Nombre del huesped</label>
+        <input type="text" name="huesped" id="huesped" required autofocus>
 
-            <label for="precio">Precio por noche</label>
-            <input type="text" name="precio" id="precio" required autofocus>
+        </br>
 
-            </br>
+        <label for="precio">Precio por noche</label>
+        <input type="text" name="precio" id="precio" required autofocus>
 
-            <label for="noches">Numero de noches</label>
-            <input type="text" name="noches" id="noches" required autofocus>
+        </br>
 
-            <button type="submit" name="enviar">Enviar</button>
+        <label for="noches">Numero de noches</label>
+        <input type="text" name="noches" id="noches" required autofocus>
+
+        <button type="submit" name="enviar">Enviar</button>
 
 
 
