@@ -1,39 +1,54 @@
 <?php
 
+namespace Modelos;
+
 class Habitacion
 {
   # Atributos
   public readonly int $numero;
-  private string $nombre;
+  public  string $nombre;
 
   # Propiedad controlada por hook de escritura
-  public float $precio {
+  public float $precio_noche {
+    get => $this->precio_noche;
     set {
       if ($value <= 0):
-        throw new InvalidArgumentException("El precio por noche debe ser mayor de 0");
+        throw new \InvalidArgumentException("El precio por noche debe ser mayor de 0");
+      else:
+        $this->precio_noche = $value;
       endif;
-
-      $this->precio = $value;
     }
   }
 
   # Propiedad controlada por hook de escritura
   public int $capacidad {
+    get => $this->capacidad;
     set {
       if ($value < 1):
-        throw new InvalidArgumentException("El numero de huespedes debe ser mayor de 0");
+        throw new \InvalidArgumentException("El numero de huespedes debe ser mayor de 0");
+      else:
+        $this->capacidad = $value;
       endif;
-
-      $this->capacidad = $value;
     }
   }
+
   private bool $disponible;
 
-  public function __construct(int $num, string $nombre, float $precio, int $capacidad)
+  # Hacemos los parámetros opcionales para que PDO::fetchObject() pueda instanciarla sin argumentos
+  /**
+   * 
+   * @param int $num
+   * @param string $nombre
+   * @param float $precio
+   * @param int $capacidad
+   */
+  public function __construct(int $num = 0, string $nombre = "", float $precio = 1, int $capacidad = 1)
   {
-    $this->numero = $num;
+    if ($num !== 0) {
+      $this->numero = $num;
+    }
     $this->nombre = $nombre;
-    $this->precio = $precio;
+    $this->precio_noche = $precio;
     $this->capacidad = $capacidad;
     $this->disponible = true;
   }
@@ -42,6 +57,16 @@ class Habitacion
   public function getNombre(): string
   {
     return $this->nombre;
+  }
+
+  public function getCapacidad(): int
+  {
+    return $this->capacidad;
+  }
+
+  public function isDisponible(): bool
+  {
+    return $this->disponible;
   }
 
   # Metodos para controlar el estado de las habitaciones
@@ -53,16 +78,5 @@ class Habitacion
   public function liberar()
   {
     $this->disponible = true;
-  }
-
-  # Metodo que devuelve la representacion de html de una habitacion
-  public function devolverHabitacion(): string
-  {
-      $estadoTexto = $this->disponible ? "Disponible" : "Ocupada";    
-
-      return "<h3> Habitacion $this->numero - $this->nombre </h3>
-              </br><p> Precio por noche: $this->precio</p>
-              <p>Capacidad: $this->capacidad huespedes</p>
-              <p>Estado: $estadoTexto</p>";
   }
 }

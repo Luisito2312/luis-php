@@ -1,19 +1,12 @@
 <?php
+    require_once "autoload.php";
 
-require_once "nocturna.php";
-require_once "modelos/Habitacion.php";
+    use Bd\Database;
+    use Modelos\Habitacion;
 
-if ($_POST):
+    $pdo = Database::conexion();
 
-    $huesped = $_POST["huesped"];
-    $precio = $_POST["precio"];
-    $noches = $_POST["noches"];
-
-    # Calculamos el precio por la estancia 
-    $precio = calcularEstancia($precio, $noches);
-
-endif;
-
+    $resultado = $pdo->query("SELECT * FROM habitacion;");
 ?>
 
 <!DOCTYPE html>
@@ -30,54 +23,68 @@ endif;
         crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="bg-dark text-light">
 
-    <div class="container">
-        <form action="index.php" method="post"></form>
-
-        <div class="izquierda">
-            <h3>Habitaciones</h3>
-            <table>
-                <thead>
-                    <th>Nº</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Capacidad</th>
-                </thead>
-                <tbody>
-                    <?php mostrarHabitaciones(); ?>
-                </tbody>
-            </table>
-        </div>
-
-
-        <div class="derecha">
-            <div class="">
-
+    <!-- Menú Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black bg-opacity-50 border-bottom border-secondary py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.php">
+                <i class="bi bi-moon-stars-fill text-danger"></i>
+                NOCTURNA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNocturna" aria-controls="menuNocturna" aria-expanded="false" aria-label="Mostrar menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuNocturna">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.php">Habitaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reservas</a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
 
-
-
-        <label for="huesped">Nombre del huesped</label>
-        <input type="text" name="huesped" id="huesped" required autofocus>
-
-        </br>
-
-        <label for="precio">Precio por noche</label>
-        <input type="text" name="precio" id="precio" required autofocus>
-
-        </br>
-
-        <label for="noches">Numero de noches</label>
-        <input type="text" name="noches" id="noches" required autofocus>
-
-        <button type="submit" name="enviar">Enviar</button>
-
-
-
-        </form>
-    </div>
+    <!-- Contenido Principal -->
+    <main class="container my-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="tablaHabitaciones" class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4 py-3">Número</th>
+                                <th class="py-3">Habitación</th>
+                                <th class="py-3">Capacidad</th>
+                                <th class="py-3">Estado</th>
+                                <th class="py-3">Precio / Noche</th>
+                                <th class="pe-4 py-3 text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                while ($habitacion = $resultado->fetchObject(Habitacion::class) ):
+                            ?>
+                            <tr data-estado="<?= $habitacion->isDisponible() ? 'libre' : 'reservada' ?>">
+                                <td class="ps-4 fw-bold"><?= $habitacion->numero; ?></td>
+                                <td><?= $habitacion->nombre; ?></td>
+                                <td><i class="bi bi-people-fill me-1 text-secondary"></i> <?= $habitacion->getCapacidad(); ?></td>
+                                <td class="estado-celda"><span class="badge bg-success">Libre</span></td>
+                                <td><!-- Precio --> €</td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-primary me-1" onclick="cambiarEstado(this, 'reservada')">Reservar</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="cambiarEstado(this, 'libre')" disabled>Liberar</button>
+                                </td>
+                            </tr><?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 
 </body>
 
