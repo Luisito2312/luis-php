@@ -1,82 +1,91 @@
 <?php
 
-namespace Modelos;
+namespace Nocturna\Modelos;
 
 class Habitacion
 {
-  # Atributos
-  public readonly int $numero;
-  public  string $nombre;
+    # Atributos
+    public private(set) int $numero;
+    public private(set) string $nombre;
 
-  # Propiedad controlada por hook de escritura
-  public float $precio_noche {
-    get => $this->precio_noche;
-    set {
-      if ($value <= 0):
-        throw new \InvalidArgumentException("El precio por noche debe ser mayor de 0");
-      else:
-        $this->precio_noche = $value;
-      endif;
+    public Estado $estado = Estado::DISPONIBLE {
+        set(Estado|int $value) {
+            if (is_int($value)):
+                $this->estado = ($value == 1) ? Estado::DISPONIBLE : Estado::OCUPADA;
+            else:
+                $this->estado = $value;
+            endif;
+        }
     }
-  }
 
-  # Propiedad controlada por hook de escritura
-  public int $capacidad {
-    get => $this->capacidad;
-    set {
-      if ($value < 1):
-        throw new \InvalidArgumentException("El numero de huespedes debe ser mayor de 0");
-      else:
-        $this->capacidad = $value;
-      endif;
+    # Hook virtual para mapear la columna 'disponible' de la BD hacia '$this->estado'
+    public int|bool $disponible {
+        get => $this->estado === Estado::DISPONIBLE;
+        set => $this->estado = ($value == 1) ? Estado::DISPONIBLE : Estado::OCUPADA;
     }
-  }
 
-  private bool $disponible;
-
-  # Hacemos los parámetros opcionales para que PDO::fetchObject() pueda instanciarla sin argumentos
-  /**
-   * 
-   * @param int $num
-   * @param string $nombre
-   * @param float $precio
-   * @param int $capacidad
-   */
-  public function __construct(int $num = 0, string $nombre = "", float $precio = 1, int $capacidad = 1)
-  {
-    if ($num !== 0) {
-      $this->numero = $num;
+    # Propiedad controlada por hook de escritura
+    public float $precio_noche {
+        get => $this->precio_noche;
+        set {
+            if ($value <= 0):
+                throw new \InvalidArgumentException("El precio por noche debe ser mayor de 0");
+            else:
+                $this->precio_noche = $value;
+            endif;
+        }
     }
-    $this->nombre = $nombre;
-    $this->precio_noche = $precio;
-    $this->capacidad = $capacidad;
-    $this->disponible = true;
-  }
 
-  # getters
-  public function getNombre(): string
-  {
-    return $this->nombre;
-  }
+    # Propiedad controlada por hook de escritura
+    public int $capacidad {
+        get => $this->capacidad;
+        set {
+            if ($value < 1):
+                throw new \InvalidArgumentException("El numero de huespedes debe ser mayor de 0");
+            else:
+                $this->capacidad = $value;
+            endif;
+        }
+    }
 
-  public function getCapacidad(): int
-  {
-    return $this->capacidad;
-  }
+    public function __construct()
+    {}
 
-  public function isDisponible(): bool
-  {
-    return $this->disponible;
-  }
+    # Getters
+    public function getNombre(): string
+    {
+        return $this->nombre;
+    }
 
-  # Metodos para controlar el estado de las habitaciones
-  public function ocupar()
-  {
-    $this->disponible = false;
-  }
+    public function getCapacidad(): int
+    {
+        return $this->capacidad;
+    }
 
-  public function liberar()
-  {
-    $this->disponible = true;
-  }
+    public function isDisponible(): bool
+    {
+        return $this->estado === Estado::DISPONIBLE;
+    }
+
+    # Métodos para controlar el estado
+    public function ocupar(): void
+    {
+        $this->estado = Estado::OCUPADA;
+    }
+
+    public function liberar(): void
+    {
+        $this->estado = Estado::DISPONIBLE;
+    }
+
+    # Setters
+    public function setNumero(int $numero): void
+    {
+        $this->numero = $numero;
+    }
+
+    public function setNombre(string $nombre): void
+    {
+        $this->nombre = $nombre;
+    }
 }
