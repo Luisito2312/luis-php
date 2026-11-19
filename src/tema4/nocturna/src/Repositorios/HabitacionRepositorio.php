@@ -35,4 +35,21 @@ class HabitacionRepositorio
 
         return $habitaciones;
     }
+
+    /**
+     * Borramos una habitacion
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        # creamos la plantilla de la sentencia sql con los marcadores/etiquetas necesarios
+        $sql = "DELETE FROM habitaciones WHERE idHabitacion = :id;";
+
+        # Preparamos la sentencia sql y obtenemos un objeto de tipo PDOStatement
+        $smtp = $this->pdo->prepare($sql);
+        
+        $smtp->execute([
+            ":id" => $id
+            ]) ;
+    }
 }

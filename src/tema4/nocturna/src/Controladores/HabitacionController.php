@@ -14,4 +14,12 @@ class HabitacionController
         require_once "./Vistas/lista_habitaciones.php";
 
     }
+
+    public function borrar( int $id) : void
+    {
+        $habitacionRepositorio = new HabitacionRepositorio();
+        $habitacionRepositorio->delete($id);
+        header("location: /");
+
+    }
 }

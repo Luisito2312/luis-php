@@ -1,7 +1,6 @@
 <?php
 
-require_once "Direccion.php";
-
+namespace Nocturna\Modelos;
 
 class Cliente{
 

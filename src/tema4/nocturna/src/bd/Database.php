@@ -12,7 +12,7 @@ class Database
     private const string DATABASE_USER = "root";
     private const string DATABASE_PASS = "root";
 
-    private static \PDO $pdo;
+    private static ?\PDO $pdo;
     private static ?Database $instancia = null;
 
     /**
@@ -48,4 +48,9 @@ class Database
         }
         return self::$pdo;
     }
+
+    // public function __destruct()
+    // {
+    //     $this->pdo = null;
+    // }
 }

@@ -5,6 +5,7 @@ namespace Nocturna\Modelos;
 class Habitacion
 {
     # Atributos
+    public readonly int $idhabitacion;
     public private(set) int $numero;
     public private(set) string $nombre;
 
