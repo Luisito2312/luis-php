@@ -60,7 +60,7 @@ class HabitacionRepository
     /**
      * Actualizar las habitaciones de la base de datos
      * @param array $datos
-     * @return void
+     * @return bool
      */
     public function update(array $datos): bool
     {
