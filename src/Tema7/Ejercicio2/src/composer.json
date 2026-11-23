@@ -1,6 +1,6 @@
 {
     "autoload": {
-        "psr-4": { "Nocturna\\":"./" }
+        "psr-4": { "Objeto\\":"./" }
     },
     "require": {
         "twig/twig": "^3.0"

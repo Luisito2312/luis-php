@@ -6,6 +6,19 @@
     use Twig\Loader\FilesystemLoader;
 
 
-    abstract class ObjetoController {
+    abstract class BaseController {
+        private Environment $twig;
 
+        public function __construct()
+        {
+            require_once __DIR__ . "/../vendor/autoload.php";
+
+            $loader = new FilesystemLoader(__DIR__ . '/../Vistas');
+            $this->twig = new Environment($loader);
+        }
+
+        public function render(string $plantilla, array $datos = []) : void
+        {
+            echo $this->twig->render($plantilla, $datos);
+        }
     }
