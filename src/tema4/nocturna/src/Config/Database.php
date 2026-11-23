@@ -1,6 +1,6 @@
 <?php
 
-namespace Nocturna\Bd;
+namespace Nocturna\Config;
 
 /**
  * La clase Database implementa un patrón SINGLETON, que garantiza que siempre haya una única instancia
@@ -49,8 +49,4 @@ class Database
         return self::$pdo;
     }
 
-    // public function __destruct()
-    // {
-    //     $this->pdo = null;
-    // }
 }
