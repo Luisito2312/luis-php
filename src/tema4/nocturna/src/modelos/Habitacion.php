@@ -52,12 +52,6 @@ class Habitacion
         }
     }
 
-    // public function estado() 
-    // { ESTILO + ESTADO
-
-    // }
-
-
     /**
      * Constructor vacío para poder hidratar el objeto desde la base de datos.
      */
